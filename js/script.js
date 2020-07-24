@@ -37,7 +37,6 @@ document.addEventListener('DOMContentLoaded', function(){
 		xhttp.send();
 	}
 	
-	// Load page content
 	var page = window.location.hash.substr(1);
 	if(page == '') page = 'home';
 	loadPage(page);

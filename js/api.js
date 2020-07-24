@@ -24,33 +24,6 @@ function error(error) {
   console.log("Error : " + error);
 }
 
-function getMatches() {
-  fetch(base_url + "competitions/2014/matches?status=FINISHED",{
-    method: 'GET',
-    headers: {
-        'X-Auth-Token': 'd93d4aef37974d35a2a45aa8b062f53f',
-    }
-  })
-    .then(status)
-    .then(json)
-    .then(function(data) {
-      var matchesHTML = "";
-      data.matches.forEach(function(matches) {
-        matchesHTML += `
-              <div class="card">
-                <div class="card-content">
-                  <span class="card-title">${matches.awayTeam.name} ${matches.score.fullTime.awayTeam} VS ${matches.score.fullTime.homeTeam} ${matches.homeTeam.name}</span>
-                </div>
-              </div>
-            `;
-      });
-      // Sisipkan komponen card ke dalam elemen dengan id #content
-      document.getElementById("matches").innerHTML = matchesHTML;
-    })
-    .catch(error);
-}
-
-
 function getTeams() {
   fetch(base_url + "competitions/2014/teams",{
     method: 'GET',
@@ -63,13 +36,20 @@ function getTeams() {
     .then(function(data) {
       var teamsHTML = "";
       data.teams.forEach(function(teams) {
-        teamsHTML += `
-              <div class="card">
-                <div class="card-content">
-                  <span class="card-title">${teams.name}</span>
-                  <img width="100%" height="100%" src="${teams.crestUrl}">
-                </div>
-              </div>
+        teamsHTML += ` <div class="col s12 m3">
+                        <div class="card blue-grey darken-3  white-text">
+                          <br>
+                          <p class="center"><b>${teams.name}</b></p>
+                          <div class="card-image">
+                            <img src="${teams.crestUrl}" class="reponsive-img" height="150px">
+                          </div>
+                          <div class="card-content">
+                          </div>
+                          <div class="card-action center">
+                            <a href="#">Detail</a>
+                          </div>
+                        </div>
+                      </div>
             `;
       });
       // Sisipkan komponen card ke dalam elemen dengan id #content
@@ -97,19 +77,38 @@ function getStandings() {
             `;
         document.getElementById("tabs").innerHTML = tabsHTML;
 
-        tabs2HTML += `<div id="${standings.type}">`;
+        tabs2HTML += `<div id="${standings.type}">
+        <table class="responsive-table">
+          <thead>
+            <tr>
+                <th class="center">POSITION</th>
+                <th class="center">TEAMS</th>
+                <th class="center">WON</th>
+                <th class="center">DRAW</th>
+                <th class="center">LOST</th>
+                <th class="center">GOALS</th>
+                <th class="center">POINTS</th>
+            </tr>
+          </thead>
+          <tbody>`;
 
         standings.table.forEach(function(table) {
           tabs2HTML +=`
-                <div class="card blue-grey darken-3">
-                  <div class="card-content white-text">
-                      <p>${table.position} ${table.team.name}</p>
-                  </div>
-                </div>
+                          <tr>
+                            <th class="center">${table.position}</th>
+                            <td><i class="material-icons"><img src="${table.team.crestUrl}" width="20px" height="20px"></i>&nbsp;&nbsp;&nbsp; ${table.team.name}</td>
+                            <td class="center">${table.won}</td>
+                            <td class="center">${table.draw}</td>
+                            <td class="center">${table.lost}</td>
+                            <td class="center">${table.goalsFor} : ${table.goalsAgainst}</td>
+                            <td class="center">${table.points}</td>
+                          </tr>
               `;
         });
         
-        tabs2HTML +=`</div>`;
+        tabs2HTML +=`
+        </tbody>
+        </table></div>`;
         document.getElementById("type").innerHTML = tabs2HTML;
         
       });
