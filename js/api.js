@@ -41,7 +41,7 @@ function getTeams() {
               <div class="card-content">
               </div>
               <div class="card-action center">
-                <a href="#">Detail</a>
+                  <a href="./team.html?id=${teams.id}">Detail</a>
               </div>
             </div>
           </div>
@@ -86,7 +86,7 @@ function getTeams() {
 }
 
 function getStandings() {
-  if ("caches" in window) {
+  if ('caches' in window) {
     caches.match(base_url + "competitions/2014/standings",{
       method: 'GET',
       headers: {
@@ -139,6 +139,9 @@ function getStandings() {
             document.getElementById("type").innerHTML = tabs2HTML;
             
           });
+
+          var el = document.querySelector('.tabs');
+          var instance = M.Tabs.init(el, {});
     
         });
         
@@ -200,7 +203,6 @@ function getStandings() {
         
       });
 
-      // Sisipkan komponen card ke dalam elemen dengan id #content
       var el = document.querySelector('.tabs');
       var instance = M.Tabs.init(el, {});
     })
@@ -417,7 +419,15 @@ function getFavouritedTeamsById() {
       </div>
     </div>`;
     document.getElementById("body-content").innerHTML = teamsHTML;
+
+    var btnDelete = document.getElementById("delete");
+    
+    btnDelete.onclick = function() {
+      console.log("Tombol Delete di klik.");
+      deleteFavourite(teams.id);
+    };
   });
+  
 }
 
 function getById(id) {

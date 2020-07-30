@@ -34,6 +34,11 @@
         <i class="large material-icons">favorite</i>
         </a>
     </div>
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large blue-grey darken-3" id="delete">
+        <i class="large material-icons">delete</i>
+        </a>
+    </div>
     <script
       type="text/javascript"
       src="https://unpkg.com/snarkdown@1.0.2/dist/snarkdown.umd.js"
@@ -49,20 +54,23 @@
         var isFromSaved = urlParams.get("saved");
 
         var btnSave = document.getElementById("save");
+        var btnDelete = document.getElementById("delete");
         
         if (isFromSaved) {
           btnSave.style.display = 'none';
-          getFavouritedTeamsById();
+          var item = getFavouritedTeamsById();
         } else {
+          btnDelete.style.display = 'none';
           var item = getTeamsById();
         }
         
         btnSave.onclick = function() {
-          console.log("Tombol FAB di klik.");
+          console.log("Tombol Save di klik.");
           item.then(function(team) {
             saveForLater(team);
           });
         };
+
       });
     </script>
   </body>

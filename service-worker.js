@@ -1,4 +1,4 @@
-const CACHE_NAME = "liligaan-v1";
+const CACHE_NAME = "liligaan-v3";
 var urlsToCache = [
   "/",
   "/css/materialize.min.css",
@@ -14,7 +14,11 @@ var urlsToCache = [
   "/pages/teams.html",
   "/index.html",
   "/nav.html",
-  "/team.html"
+  "/team.html",
+  "/cek-worker.js",
+  "/icon-192x192.png",
+  "/icon-512x512.png",
+  "/manifest.json"
 ];
 
 self.addEventListener("install", function(event) {
@@ -39,11 +43,11 @@ self.addEventListener("fetch", function(event) {
     );
   } else {
     event.respondWith(
-      caches.match(event.request, { ignoreSearch: true }).then(function(response) {
-        return response || fetch (event.request);
-      })
+        caches.match(event.request, { ignoreSearch: true }).then(function(response) {
+            return response || fetch (event.request);
+        })
     )
-  }
+}
 });
 
 self.addEventListener("activate", function(event) {
@@ -58,5 +62,25 @@ self.addEventListener("activate", function(event) {
         })
       );
     })
+  );
+});
+
+self.addEventListener('push', function(event) {
+  var body;
+  if (event.data) {
+    body = event.data.text();
+  } else {
+    body = 'Push message no payload';
+  }
+  var options = {
+    body: body,
+    vibrate: [100, 50, 100],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: 1
+    }
+  };
+  event.waitUntil(
+    self.registration.showNotification('LILIGAAN', options)
   );
 });
