@@ -18,7 +18,7 @@ function error(error) {
   console.log("Error : " + error);
 }
 
-function getTeams() {
+function getCacheTeams(){
   if ("caches" in window) {
     caches.match(base_url + "competitions/2014/teams",{
       method: 'GET',
@@ -36,7 +36,7 @@ function getTeams() {
               <br>
               <p class="center"><b>${teams.name}</b></p>
               <div class="card-image">
-                <img src="${teams.crestUrl}" class="reponsive-img" height="150px">
+                <img src="${teams.crestUrl.replace(/^http:\/\//i, 'https://')}" class="reponsive-img" height="150px">
               </div>
               <div class="card-content">
               </div>
@@ -52,6 +52,11 @@ function getTeams() {
       }
     });
   }
+}
+
+function getTeams() {
+  
+  getCacheTeams();
 
   fetch(base_url + "competitions/2014/teams",{
     method: 'GET',
@@ -65,11 +70,11 @@ function getTeams() {
       var teamsHTML = "";
       data.teams.forEach(function(teams) {
         teamsHTML += ` <div class="col s12 m3">
-                        <div class="card blue-grey darken-3  white-text">
+                        <div class="card small blue-grey darken-3  white-text">
                           <br>
                           <p class="center"><b>${teams.name}</b></p>
                           <div class="card-image">
-                            <img src="${teams.crestUrl}" class="reponsive-img" height="150px">
+                            <img src="${teams.crestUrl.replace(/^http:\/\//i, 'https://')}" class="reponsive-img" width="150px" height="150px">
                           </div>
                           <div class="card-content">
                           </div>
@@ -85,7 +90,7 @@ function getTeams() {
     .catch(error);
 }
 
-function getStandings() {
+function getCacheStandings(){
   if ('caches' in window) {
     caches.match(base_url + "competitions/2014/standings",{
       method: 'GET',
@@ -123,7 +128,7 @@ function getStandings() {
               tabs2HTML +=`
                               <tr>
                                 <th class="center">${table.position}</th>
-                                <td><i class="material-icons"><img src="${table.team.crestUrl}" width="20px" height="20px"></i>&nbsp;&nbsp;&nbsp; ${table.team.name}</td>
+                                <td><i class="material-icons"><img src="${table.team.crestUrl.replace(/^http:\/\//i, 'https://')}" width="20px" height="20px"></i>&nbsp;&nbsp;&nbsp; ${table.team.name}</td>
                                 <td class="center">${table.won}</td>
                                 <td class="center">${table.draw}</td>
                                 <td class="center">${table.lost}</td>
@@ -140,15 +145,18 @@ function getStandings() {
             
           });
 
-          var el = document.querySelector('.tabs');
-          var instance = M.Tabs.init(el, {});
+          // var el = document.querySelector('.tabs');
+          // var instance = M.Tabs.init(el, {});
     
         });
         
       }
     });
   }
-  
+}
+
+function getStandings() {
+  getCacheStandings();
   fetch(base_url + "competitions/2014/standings",{
     method: 'GET',
     headers: {
@@ -186,7 +194,7 @@ function getStandings() {
           tabs2HTML +=`
                           <tr>
                             <th class="center">${table.position}</th>
-                            <td><i class="material-icons"><img src="${table.team.crestUrl}" width="20px" height="20px"></i>&nbsp;&nbsp;&nbsp; ${table.team.name}</td>
+                            <td><i class="material-icons"><img src="${table.team.crestUrl.replace(/^http:\/\//i, 'https://')}" width="20px" height="20px"></i>&nbsp;&nbsp;&nbsp; ${table.team.name}</td>
                             <td class="center">${table.won}</td>
                             <td class="center">${table.draw}</td>
                             <td class="center">${table.lost}</td>
@@ -228,7 +236,7 @@ function getTeamsById() {
             <div class="section">
             <div class="center container white-text">
               <br><br>
-              <img class="responsive-img" width="20%" src="${teams.crestUrl}">
+              <img class="responsive-img" width="20%" src="${teams.crestUrl.replace(/^http:\/\//i, 'https://')}">
               <h1 class="header center ">${teams.name}</h1>
               <h5 class="header col s12 light">( ${teams.shortName} )</h5>
               <br>
@@ -318,7 +326,7 @@ function getFavouriteTeams() {
                       <br>
                       <p class="center"><b>${teams.name}</b></p>
                       <div class="card-image">
-                        <img src="${teams.crestUrl}" class="reponsive-img" height="150px">
+                        <img src="${teams.crestUrl.replace(/^http:\/\//i, 'https://')}" class="reponsive-img" height="150px">
                       </div>
                       <div class="card-content">
                       </div>
@@ -425,6 +433,7 @@ function getFavouritedTeamsById() {
     btnDelete.onclick = function() {
       console.log("Tombol Delete di klik.");
       deleteFavourite(teams.id);
+      M.toast({html: 'Tim dihapus dari favourite'});
     };
   });
   
